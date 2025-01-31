@@ -27,7 +27,7 @@ def validar_notas(df):
     return df
 
 def calcular_notas_definitivas(df):
-    df["NotaDefinitiva"] = (df["Parcial1"] + df["Parcial2"]) / 2
+    df["NotaDefinitiva"] = (df["Nota_Parcial_1"] + df["Nota_Parcial_2"]) / 2
     return df
 
 
@@ -56,7 +56,14 @@ def resultados(df):
     print(f"Promedio de Notas Definitivas de Mujeres: {prom_mujeres:.2f}")
     print(f"Número de Estudiantes Reprobados: {reprobados}")
 
-def resultados(df):
-
-# Ejecutar validación
 df = pd.read_csv(CSV_FILENAME)
+df = validar_notas(df)
+df = calcular_notas_definitivas(df)
+
+ParcialesTodosEstudiantes(df)
+
+PromedioParcial(df, 1)
+
+PromedioParcial(df, 2)
+
+resultados(df)
