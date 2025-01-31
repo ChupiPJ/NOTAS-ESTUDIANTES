@@ -1,17 +1,31 @@
-from constants import MIN_NOTA, MAX_NOTA, CSV_FILENAME
 import pandas as pd
+from utils import revisar_nota
+from constants import APROBADO, CSV_FILENAME
 
-# Function that return the number of students
-def leer_csv():
-    try:
-        df = pd.read_csv(CSV_FILENAME)
-        return df
-    except FileNotFoundError:
-        print(f"El archivo {CSV_FILENAME} no se encuentra.")
-        return None
+def validar_notas(df):
 
-def revisar_nota(nota):
-    if MIN_NOTA <= nota <= MAX_NOTA:
-        return "N"
+    df.columns = df.columns.str.strip()
+
+    """Comprueba que las notas están en el rango permitido y corrige valores inválidos."""
+    errores = df[(df["Nota_Parcial_1"] < 0) | (df["Nota_Parcial_1"] > 5) |
+                 (df["Nota_Parcial_2"] < 0) | (df["Nota_Parcial_2"] > 5)]
+    
+    if not errores.empty:
+        print("⚠ Se han encontrado notas inválidas:")
+        print(errores)
+
+        df.loc[df["Nota_Parcial_1"] < 0, "Nota_Parcial_1"] = 0
+        df.loc[df["Nota_Parcial_1"] > 5, "Nota_Parcial_1"] = 5
+        df.loc[df["Nota_Parcial_2"] < 0, "Nota_Parcial_2"] = 0
+        df.loc[df["Nota_Parcial_2"] > 5, "Nota_Parcial_2"] = 5
+
+        print("\n✅ Notas corregidas automáticamente dentro del rango permitido.")
+
     else:
-        return "S"
+        print("✅ Todos los parciales tienen valores válidos.")
+
+    return df  # Retornar el DataFrame corregido
+
+# Ejecutar validación
+df = pd.read_csv(CSV_FILENAME)
+validar_notas(df)
