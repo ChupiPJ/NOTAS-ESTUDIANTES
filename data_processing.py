@@ -9,21 +9,6 @@ def validar_notas(df):
     """Comprueba que las notas están en el rango permitido y corrige valores inválidos."""
     errores = df[(df["Nota_Parcial_1"] < 0) | (df["Nota_Parcial_1"] > 5) |
                  (df["Nota_Parcial_2"] < 0) | (df["Nota_Parcial_2"] > 5)]
-    
-    if not errores.empty:
-        print("⚠ Se han encontrado notas inválidas:")
-        print(errores)
-
-        df.loc[df["Nota_Parcial_1"] < 0, "Nota_Parcial_1"] = 0
-        df.loc[df["Nota_Parcial_1"] > 5, "Nota_Parcial_1"] = 5
-        df.loc[df["Nota_Parcial_2"] < 0, "Nota_Parcial_2"] = 0
-        df.loc[df["Nota_Parcial_2"] > 5, "Nota_Parcial_2"] = 5
-
-        print("\n✅ Notas corregidas automáticamente dentro del rango permitido.")
-
-    else:
-        print("✅ Todos los parciales tienen valores válidos.")
-
     return df
 
 def calcular_notas_definitivas(df):
@@ -59,11 +44,3 @@ def resultados(df):
 df = pd.read_csv(CSV_FILENAME)
 df = validar_notas(df)
 df = calcular_notas_definitivas(df)
-
-ParcialesTodosEstudiantes(df)
-
-PromedioParcial(df, 1)
-
-PromedioParcial(df, 2)
-
-resultados(df)
